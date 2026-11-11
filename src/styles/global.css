@@ -1,0 +1,44 @@
+/* Base styles and a few shared building blocks used across components.
+   Everything component-specific lives in that component's .module.css. */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: var(--night); color: var(--parchment); font-family: var(--body); }
+body { overflow: hidden; }
+body.scrollable { overflow: auto; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+
+kbd {
+  font-family: var(--display); font-size: 12px; font-weight: 700; color: var(--gold-bright);
+  padding: 2px 7px; border: 1px solid var(--gold-dim); border-radius: 3px; background: rgba(20, 12, 5, 0.75);
+}
+
+/* Parchment sheet with a leather and gold frame. */
+.parchment {
+  position: relative; color: var(--ink);
+  background: var(--paper-grain), radial-gradient(ellipse at center, var(--parchment) 45%, var(--parchment-deep) 100%);
+  border: 1px solid #6e4f28;
+  box-shadow: 0 0 0 5px var(--leather), 0 0 0 6px var(--gold-dim), 0 22px 60px rgba(0, 0, 0, 0.75);
+}
+
+.kicker { font-family: var(--display); font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--blood); font-weight: 700; }
+
+.flourish { display: block; height: 1px; width: min(320px, 60%); margin: 10px auto 0; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+.btn {
+  display: inline-block; font-family: var(--display); font-weight: 700; letter-spacing: 0.1em; font-size: 16px;
+  padding: 14px 30px; text-decoration: none; border: 1px solid var(--gold-dim); color: var(--parchment);
+  background: rgba(24, 14, 6, 0.75); transition: all 0.18s ease;
+}
+.btn:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+.btn-primary { background: linear-gradient(180deg, #e3b65a, #a5752e); color: #24150a; border-color: #ffe0a0; box-shadow: 0 0 28px rgba(255, 180, 80, 0.35); }
+.btn-primary:hover { background: linear-gradient(180deg, #ffd98a, #c28d3a); color: #24150a; }
+
+.close-btn { font-size: 30px; line-height: 1; width: 44px; height: 44px; color: var(--ink); border: 1px solid rgba(58, 37, 19, 0.5); background: rgba(255, 240, 200, 0.3); }
+.close-btn:hover { background: var(--blood); color: #fff0d0; }
+
+@keyframes fade-in { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

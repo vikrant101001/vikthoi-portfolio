@@ -1,0 +1,26 @@
+/* Design tokens. Change the look of the whole site from here. */
+:root {
+  --ink: #2a1a0c;
+  --ink-soft: #5a4228;
+  --parchment: #e7d3a6;
+  --parchment-deep: #cfb47e;
+  --parchment-text: #f0dfb9;
+  --leather: #24170c;
+  --night: #120b05;
+  --hud-bg: rgba(20, 12, 5, 0.88);
+  --gold: #d9ab4e;
+  --gold-bright: #ffd98a;
+  --gold-dim: #8c6c34;
+  --blood: #8a241c;
+  --rule: rgba(90, 66, 40, 0.35);
+
+  --display: "Cinzel", "Trajan Pro", Georgia, serif;
+  --body: "EB Garamond", Georgia, "Times New Roman", serif;
+
+  --z-hud: 10;
+  --z-overlay: 20;
+  --z-title: 30;
+  --z-fade: 40;
+
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .2 0 0 0 0 .08 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}

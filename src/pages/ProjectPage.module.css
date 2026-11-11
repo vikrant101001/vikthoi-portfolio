@@ -1,0 +1,5 @@
+.summary { font-size: 23px !important; font-style: italic; color: var(--ink-soft); margin: 10px 0 18px !important; }
+.stack { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-wrap: wrap; gap: 8px; }
+.stack li { font-family: var(--display); font-size: 13px; font-weight: 700; padding: 4px 10px; border: 1px solid var(--rule); background: rgba(240, 224, 186, 0.7); }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.links a { color: var(--parchment) !important; }
