@@ -5,6 +5,7 @@
 export type Side = "personal" | "pro";
 
 export interface Profile {
+  siteTitle: string;
   name: string;
   title: string;
   tagline: string;

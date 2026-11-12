@@ -224,7 +224,7 @@ export class Engine {
     this.cam.y = clamp(this.player.y - this.vh / 2, 0, this.plan.H - this.vh);
   }
 
-  private update(dt: number, t: number) {
+  private update(dt: number) {
     const p = this.player, k = this.keys, plan = this.plan;
     let dx = 0, dy = 0;
     if (this.mode === "play") {
@@ -259,10 +259,10 @@ export class Engine {
       p.heading += diff * Math.min(1, dt * 7);
     }
 
-    /* Camera. On the title screen it drifts slowly back and forth over the seam. */
+    /* Camera. On the title screen it holds still, centred on the stage. */
     if (this.mode === "title") {
-      this.cam.x = clamp(plan.spawn.x - this.vw / 2 + Math.sin(t * 0.00012) * 160, 0, plan.W - this.vw);
-      this.cam.y = clamp(plan.spawn.y - this.vh / 2 - 40 + Math.cos(t * 0.00009) * 40, 0, plan.H - this.vh);
+      this.cam.x = clamp(plan.plaza.x - this.vw / 2, 0, plan.W - this.vw);
+      this.cam.y = clamp(plan.plaza.y - this.vh / 2, 0, plan.H - this.vh);
     } else {
       const f = this.calm ? 1 : Math.min(1, dt * 6);
       this.cam.x += (clamp(p.x - this.vw / 2, 0, plan.W - this.vw) - this.cam.x) * f;
@@ -480,7 +480,7 @@ export class Engine {
   private loop = (t: number) => {
     const dt = Math.min(0.05, (t - this.last) / 1000 || 0);
     this.last = t;
-    this.update(dt, t);
+    this.update(dt);
     this.draw(t);
     if (this.mode !== "title") this.frameSubs.forEach((fn) => fn(this));
     this.raf = requestAnimationFrame(this.loop);

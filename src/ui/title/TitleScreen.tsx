@@ -24,11 +24,11 @@ export function TitleScreen({ skip }: { skip: boolean }) {
 
   return (
     <section className={`${styles.title} ${started ? styles.leaving : ""}`}>
-      <title>{`${profile.name} · ${profile.realm}`}</title>
+      <title>{profile.siteTitle}</title>
       <div className={styles.inner}>
         <div className={styles.crest} aria-hidden="true" />
         <p className={styles.eyebrow}>{profile.realm}</p>
-        <h1>{profile.name}</h1>
+        <h1>{profile.siteTitle}</h1>
         <p className={styles.tagline}>{profile.tagline}</p>
         {ready ? (
           <div className={styles.actions}>
