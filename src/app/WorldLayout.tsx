@@ -15,7 +15,7 @@ export function WorldLayout() {
   const started = useGame((s) => s.started);
   const overlay = pathname !== "/";
 
-  /* Arriving on a deep link such as /about skips the title screen. */
+  /* Arriving on a deep link such as /career-2 skips the title screen. */
   useEffect(() => {
     if (overlay && !started) useGame.setState({ started: true });
   }, [overlay, started]);

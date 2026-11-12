@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
-import { projectBySlug } from "@/content/projects";
-import { sections } from "@/content/sections";
+import { projectBySlug, projects } from "@/content/projects";
+import { roads } from "@/content/roads";
 import { PageShell } from "./PageShell";
 import { NotFound } from "./NotFound";
 import styles from "./ProjectPage.module.css";
@@ -10,9 +10,11 @@ export function ProjectPage() {
   const { slug = "" } = useParams();
   const project = projectBySlug(slug);
   if (!project) return <NotFound />;
+  /* Back to this project's building on the projects road. */
+  const stop = roads.projects.ids[projects.indexOf(project)];
   return (
-    <PageShell title={project.name} back={{ to: `/${sections.guild.slug}`, label: `Back to ${sections.guild.title}` }}>
-      <small className="kicker">{project.rarity} contract{project.year ? ` · ${project.year}` : ""}</small>
+    <PageShell title={project.name} theme="pro" back={{ to: `/${stop}`, label: "Back to the projects road" }}>
+      <small className={styles.kicker}>{project.rarity}{project.year ? ` · ${project.year}` : ""}</small>
       <h1>{project.name}</h1>
       <p className={styles.summary}>{project.summary}</p>
       {project.stack && (
@@ -23,7 +25,7 @@ export function ProjectPage() {
       {project.body.map((p, i) => <p key={i}>{p}</p>)}
       {project.links && (
         <div className={styles.links}>
-          {project.links.map((l) => <a key={l.label} className="btn" href={l.href}>{l.label}</a>)}
+          {project.links.map((l) => <a key={l.label} href={l.href}>{l.label} &rarr;</a>)}
         </div>
       )}
     </PageShell>

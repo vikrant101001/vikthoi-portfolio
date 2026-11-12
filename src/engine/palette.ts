@@ -1,4 +1,6 @@
-/* Golden hour, umber shadows. Every colour in the world comes from here. */
+/* Every colour in the world comes from here.
+   Personal side: golden hour, umber shadows.
+   Professional side: ink on pale drafting paper, one gold accent. */
 export type RGB = [number, number, number];
 export type Ramp = RGB[];
 
@@ -18,11 +20,30 @@ export const GROUND = {
   rock: ramp("#17120e", "#241c15", "#33281d", "#463727", "#5c4832", "#74603f"),
 };
 
+export const PAPER = {
+  sheet: ramp("#e8e1d0", "#ece6d7", "#f0ebde"),
+  grid: rgb("#dcd3bf"),
+  road: ramp("#ddd4c0", "#e1d9c6"),
+  margin: rgb("#d4cab2"),
+  hatch: rgb("#b9ae96"),
+  ink: rgb("#2f3b4c"),
+  inkSoft: rgb("#8f8a7e"),
+};
+
+/** The centre stage: pale neutral stone with gold inlay, belonging to neither half. */
+export const STAGE = {
+  tile: ramp("#b9b1a3", "#c6bfb1", "#d2ccbf", "#ddd8cc", "#e7e3d9"),
+  step: ramp("#9f9687", "#ada494", "#bab1a1"),
+  grout: rgb("#958c7e"),
+  rimDark: rgb("#2f2b27"),
+  rimLight: rgb("#77705f"),
+  inlay: rgb("#c9a24e"),
+};
+
 /** Four-step ramps for sprites: dark, mid, light, highlight. */
 export const SLATE = ["#2b2620", "#40382d", "#544a3b", "#6e6250"];
 export const THATCH = ["#5a3f18", "#7c5a22", "#9c762e", "#c29a44"];
 export const TERRA = ["#4c2115", "#6e3220", "#8f462b", "#b0603a"];
-export const COPPER = ["#23403a", "#2f5a50", "#3f7566", "#6aa18a"];
 export const STONE = ["#3b3226", "#5a4d3a", "#75664e", "#948465", "#b0a07e"];
 export const DSTONE = ["#2b241b", "#40362a", "#544837", "#6b5d47", "#837357"];
 
@@ -30,3 +51,12 @@ export const OUT = "#1c130b";
 export const BEAM = "#3a2513";
 export const AMBER = "#ffc65a";
 export const GOLD = "#e0b24a";
+
+/** Drafting ink and paper, as CSS colours for sprites. */
+export const INK = "#2f3b4c";
+export const INK_SOFT = "rgba(47,59,76,.42)";
+export const SHEET = "#f4efe3";
+export const SHEET_2 = "#e7dfcc";
+export const SHEET_3 = "#d8cdb5";
+export const GLASS = "#dbe2e1";
+export const ACCENT = "#c99a3a";

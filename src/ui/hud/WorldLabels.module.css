@@ -1,0 +1,40 @@
+/* --s is CSS pixels per art pixel, so "calc(var(--s) * 5px)" is 5 art pixels:
+   text stays the same size relative to the world on any screen. */
+.layer { --s: 3; position: absolute; inset: 0; overflow: hidden; }
+.layer > * { position: absolute; left: 0; top: 0; white-space: nowrap; visibility: hidden; will-change: transform; text-align: center; }
+
+/* Building names. */
+.label { padding: 0.15em 0.6em 0.25em; line-height: 1.15; font-size: calc(var(--s) * 4.8px); }
+.label small { display: block; font-size: 0.7em; letter-spacing: 0.14em; text-transform: uppercase; }
+.label.personal { font-family: var(--display); font-weight: 700; color: #ffe9b8; background: rgba(20, 12, 5, 0.72); border-radius: 3px; text-shadow: 0 2px 0 #1c0f05; }
+.label.personal small { color: var(--gold); }
+.label.pro {
+  font-family: var(--sans); font-weight: 600; color: var(--pro-ink); font-size: calc(var(--s) * 4.3px);
+  background: rgba(250, 248, 242, 0.94); border: 1px solid var(--pro-ink); border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(31, 42, 55, 0.12);
+}
+.label.pro small { color: var(--pro-muted); font-weight: 600; }
+.label.visited.pro { border-color: var(--pro-accent); }
+.label.visited span::after { content: " ✓"; color: var(--pro-accent); }
+.label.visited.personal span::after { color: var(--gold-bright); }
+
+/* Road names written on the signboards. */
+.board { display: flex; align-items: center; gap: 0.3em; font-size: calc(var(--s) * 5.4px); }
+.board.personal { font-family: var(--display); font-weight: 900; color: #2a1608; text-shadow: 0 1px 0 rgba(255, 220, 160, 0.45); }
+.board.pro { font-family: var(--sans); font-weight: 700; color: var(--pro-ink); letter-spacing: -0.01em; font-size: calc(var(--s) * 5px); }
+
+/* Free-standing labels: the two halves' names in the square. */
+.sign { font-size: calc(var(--s) * 5px); }
+.sign.personal { font-family: var(--display); font-weight: 700; color: var(--gold-bright); text-shadow: 0 1px 0 #1c0f05, 0 0 8px rgba(0, 0, 0, 0.9); }
+.sign.pro { font-family: var(--sans); font-weight: 600; color: var(--pro-ink); }
+.big { font-size: calc(var(--s) * 6px); letter-spacing: 0.24em; text-transform: uppercase; }
+.big.pro { font-size: calc(var(--s) * 5px); letter-spacing: 0.32em; }
+
+/* Words carved into the centre stage: neutral, like engraved stone. */
+.engraved {
+  display: flex; align-items: center; gap: 0.35em;
+  font-family: var(--display); font-weight: 900; font-size: calc(var(--s) * 4.8px); letter-spacing: 0.26em; text-transform: uppercase;
+  color: rgba(42, 37, 31, 0.92); text-shadow: 0 1px 0 rgba(255, 252, 240, 0.8);
+}
+
+.arrow { display: inline-block; width: 1em; height: 1em; flex: none; }

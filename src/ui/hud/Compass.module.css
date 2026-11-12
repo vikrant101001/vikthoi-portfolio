@@ -1,18 +1,20 @@
 .compass {
   position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: min(520px, 38vw); height: 42px;
-  background: linear-gradient(90deg, transparent, rgba(20, 12, 5, 0.85) 16%, rgba(20, 12, 5, 0.85) 84%, transparent);
-  border-top: 1px solid rgba(217, 171, 78, 0.55); border-bottom: 1px solid rgba(217, 171, 78, 0.55);
+  background: linear-gradient(90deg, transparent, var(--hud-bg) 16%, var(--hud-bg) 84%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--hud-edge) 60%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--hud-edge) 60%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  transition: background 0.4s ease;
 }
 .track { position: absolute; inset: 0 24px; overflow: hidden; }
 .track > * { position: absolute; top: 0; left: 50%; will-change: transform; opacity: 0; }
-.letter { font-family: var(--display); font-weight: 700; color: var(--gold-bright); line-height: 25px; font-size: 15px; margin-left: -6px; }
-.tick { top: 7px !important; width: 1px; height: 6px; background: rgba(240, 223, 185, 0.5); }
-.major { top: 5px !important; height: 10px; background: rgba(240, 223, 185, 0.8); }
-.pin { top: 26px !important; width: 10px; height: 10px; margin-left: -5px; background: #a58d62; box-shadow: 0 0 0 1px #1c130b; rotate: 45deg; }
-.pin.found { background: var(--gold-bright); box-shadow: 0 0 0 1px #1c130b, 0 0 8px var(--gold); }
-.needle { position: absolute; left: 50%; bottom: -6px; margin-left: -5px; border: 5px solid transparent; border-bottom-color: var(--gold-bright); }
+.letter { font-family: var(--hud-font); font-weight: 700; color: var(--hud-title); line-height: 25px; font-size: 15px; margin-left: -6px; }
+.tick { top: 7px !important; width: 1px; height: 6px; background: color-mix(in srgb, var(--hud-text) 50%, transparent); }
+.major { top: 5px !important; height: 10px; background: color-mix(in srgb, var(--hud-text) 80%, transparent); }
+.pin { top: 26px !important; width: 10px; height: 10px; margin-left: -5px; background: var(--hud-muted); box-shadow: 0 0 0 1px #1c130b; rotate: 45deg; }
+.pin.found { background: var(--hud-accent); }
+.needle { position: absolute; left: 50%; bottom: -6px; margin-left: -5px; border: 5px solid transparent; border-bottom-color: var(--hud-accent); }
 
 @media (max-width: 820px) {
   .compass { top: 76px; width: 74vw; }

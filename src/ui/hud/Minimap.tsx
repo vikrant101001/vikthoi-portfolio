@@ -18,10 +18,12 @@ export function Minimap() {
         c.clearRect(0, 0, SIZE, SIZE);
         c.imageSmoothingEnabled = false;
         c.drawImage(w.mini, mx - SPAN / 2, my - SPAN / 2, SPAN, SPAN, 0, 0, SIZE, SIZE);
-        c.globalCompositeOperation = "color";
-        c.fillStyle = "#a57a3c";
-        c.fillRect(0, 0, SIZE, SIZE);
-        c.globalCompositeOperation = "source-over";
+        if (e.side === "personal") {
+          c.globalCompositeOperation = "color";
+          c.fillStyle = "#a57a3c";
+          c.fillRect(0, 0, SIZE, SIZE);
+          c.globalCompositeOperation = "source-over";
+        }
         for (const l of e.plan.landmarks) {
           const found = e.discovered.has(l.id);
           if (l.secret && !found) continue;

@@ -1,4 +1,4 @@
-/* Each project appears as a notice in the Guild Hall and gets its own page at
+/* Each project appears as a card in the Projects gallery and gets its own page at
    /projects/<slug>. All text is placeholder. */
 import type { Project } from "./types";
 
@@ -6,7 +6,7 @@ export const projects: Project[] = [
   {
     slug: "project-one",
     name: "Project one",
-    rarity: "Legendary",
+    rarity: "Featured",
     summary: "What it is, what you did, and what changed because of it.",
     year: "20XX",
     stack: ["Tool", "Tool", "Tool"],
@@ -20,21 +20,21 @@ export const projects: Project[] = [
   {
     slug: "project-two",
     name: "Project two",
-    rarity: "Rare",
+    rarity: "Notable",
     summary: "What it is, what you did, and what changed because of it.",
     body: ["The story of this project."],
   },
   {
     slug: "project-three",
     name: "Project three",
-    rarity: "Rare",
+    rarity: "Notable",
     summary: "What it is, what you did, and what changed because of it.",
     body: ["The story of this project."],
   },
   {
     slug: "project-four",
     name: "Project four",
-    rarity: "Common",
+    rarity: "Side project",
     summary: "What it is, what you did, and what changed because of it.",
     body: ["The story of this project."],
   },

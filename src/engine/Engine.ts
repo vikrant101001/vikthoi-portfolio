@@ -2,8 +2,9 @@
    the loop, input, collision, camera and lighting. React talks to it through
    methods and events (see src/game/). */
 import { clamp, hash } from "./math";
+import { seamAt, sideAt } from "./seam";
 import { buildPlayerFrames, canvas, ctx2d, glow, type PlayerFrames } from "./sprites";
-import type { BuiltWorld, Facing, Landmark, WorldPlan } from "./types";
+import type { BuiltWorld, Facing, Landmark, Side, WorldPlan } from "./types";
 import { buildWorld } from "./worldgen";
 
 export type Mode = "title" | "play" | "paused";
@@ -18,7 +19,7 @@ type Handler<T> = (payload: T) => void;
 
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; max: number; kind: "smoke" | "ember" }
 
-const WALK = 104, RUN = 170;
+const WALK = 120, RUN = 210;
 const INTERACT_RANGE = 40;
 
 export class Engine {
@@ -158,6 +159,21 @@ export class Engine {
     return this.plan.landmarks.find((l) => l.id === id);
   }
 
+  /** Converts a world point to CSS pixels on screen, for labels drawn by the UI. */
+  worldToScreen(x: number, y: number) {
+    return { x: (x - this.cam.x) * this.scale, y: (y - this.cam.y) * this.scale };
+  }
+
+  /** CSS pixels per art pixel; labels use it to scale with the world. */
+  get pixelScale() {
+    return this.scale;
+  }
+
+  /** Which half of the world the player is standing in. */
+  get side(): Side {
+    return sideAt(this.plan, this.player.x, this.player.y);
+  }
+
   clearInput = () => {
     this.keys.clear();
   };
@@ -243,10 +259,10 @@ export class Engine {
       p.heading += diff * Math.min(1, dt * 7);
     }
 
-    /* Camera. On the title screen it drifts slowly over the bridge. */
+    /* Camera. On the title screen it drifts slowly back and forth over the seam. */
     if (this.mode === "title") {
-      this.cam.x = clamp(plan.bridge.x - this.vw / 2 + Math.sin(t * 0.00012) * 90, 0, plan.W - this.vw);
-      this.cam.y = clamp(plan.bridge.y0 - this.vh / 2 + Math.cos(t * 0.00009) * 36, 0, plan.H - this.vh);
+      this.cam.x = clamp(plan.spawn.x - this.vw / 2 + Math.sin(t * 0.00012) * 160, 0, plan.W - this.vw);
+      this.cam.y = clamp(plan.spawn.y - this.vh / 2 - 40 + Math.cos(t * 0.00009) * 40, 0, plan.H - this.vh);
     } else {
       const f = this.calm ? 1 : Math.min(1, dt * 6);
       this.cam.x += (clamp(p.x - this.vw / 2, 0, plan.W - this.vw) - this.cam.x) * f;
@@ -259,13 +275,15 @@ export class Engine {
       for (const l of plan.landmarks) {
         const d = Math.hypot(l.door.x - p.x, l.door.y - p.y);
         if (d < best) { best = d; near = l; }
-        if (d < (l.secret ? 70 : 110)) this.discover(l.id);
+        if (d < (l.secret ? 70 : 80)) this.discover(l.id);
       }
       if (near !== this.near) { this.near = near; this.emit("near", near); }
     }
 
     if (this.calm) return;
     const w = this.world!;
+    for (const f of w.flames) if (Math.random() < dt * 18)
+      this.particles.push({ x: f.x + (Math.random() - 0.5) * 10, y: f.y - 4, vx: (Math.random() - 0.5) * 12, vy: -24 - Math.random() * 30, life: 0, max: 0.7 + Math.random() * 1, kind: "ember" });
     for (const s of w.smoke) {
       s.acc += dt * (s.heavy ? 9 : 4);
       while (s.acc > 1) {
@@ -273,8 +291,6 @@ export class Engine {
         this.particles.push({ x: s.x + (Math.random() - 0.5) * 3, y: s.y, vx: 5 + Math.random() * 7, vy: -11 - Math.random() * 9, life: 0, max: 2.6 + Math.random() * 1.6, kind: "smoke" });
       }
     }
-    for (const f of w.flames) if (Math.random() < dt * 22)
-      this.particles.push({ x: f.x + (Math.random() - 0.5) * 10, y: f.y, vx: (Math.random() - 0.5) * 12, vy: -24 - Math.random() * 34, life: 0, max: 0.8 + Math.random() * 1.1, kind: "ember" });
     const ps = this.particles;
     for (let i = ps.length - 1; i >= 0; i--) {
       const q = ps[i];
@@ -348,17 +364,37 @@ export class Engine {
       else this.drawPlayer(cx, cy);
     }
 
-    /* Hearth flame. */
+    /* Campfire flames. */
     for (const f of w.flames) {
       const fx = f.x - cx, fy = f.y - cy;
       if (!onScreen(fx, fy, 40)) continue;
-      for (let i = 0; i < 7; i++) {
-        const sway = Math.sin(t * 0.012 + i * 1.7) * 2.6, h = 13 + Math.sin(t * 0.017 + i * 2.1) * 5 - Math.abs(i - 3) * 2.4;
-        const x = Math.round(fx - 7 + i * 2 + sway * 0.4);
+      for (let i = 0; i < 6; i++) {
+        const sway = Math.sin(t * 0.012 + i * 1.7) * 2.2, h = 11 + Math.sin(t * 0.017 + i * 2.1) * 4 - Math.abs(i - 2.5) * 2.4;
+        const x = Math.round(fx - 6 + i * 2 + sway * 0.4);
         g.fillStyle = "#b53c10"; g.fillRect(x, fy - h, 2, h);
         g.fillStyle = "#f08a20"; g.fillRect(x, fy - h * 0.68, 2, h * 0.68);
         g.fillStyle = "#ffd070"; g.fillRect(x, fy - h * 0.34, 2, h * 0.34);
       }
+    }
+
+    /* Windmill blades. */
+    for (const sp of w.spinners) {
+      const hx = sp.x - cx, hy = sp.y - cy;
+      if (!onScreen(hx, hy, sp.r + 4)) continue;
+      const turn = this.calm ? 0.3 : t * 0.0011;
+      for (let k = 0; k < 4; k++) {
+        const ang = turn + (k * Math.PI) / 2, ca = Math.cos(ang), sa = Math.sin(ang);
+        for (let d = 3; d < sp.r; d++) {
+          const x = Math.round(hx + ca * d), y = Math.round(hy + sa * d);
+          g.fillStyle = "#1c130b"; g.fillRect(x, y, 1, 1);
+          if (d > 10) {
+            g.fillStyle = "#e8d6a8";
+            g.fillRect(Math.round(x - sa * 2), Math.round(y + ca * 2), 1, 1);
+            g.fillRect(Math.round(x - sa * 3), Math.round(y + ca * 3), 1, 1);
+          }
+        }
+      }
+      g.fillStyle = "#1c130b"; g.fillRect(hx - 2, hy - 2, 4, 4);
     }
 
     for (const q of this.particles) {
@@ -375,23 +411,25 @@ export class Engine {
       }
     }
 
-    /* Ravens circle the tallest tower. */
-    const tower = this.plan.landmarks.find((l) => l.sprite === "raven");
+    /* Bats circle the Vikskull hall. */
+    const tower = this.plan.landmarks.find((l) => l.sprite === "skullhall");
     if (tower) {
       g.fillStyle = "#120b06";
       for (const b of this.ravens) {
         const a = b.a + t * 0.001 * b.s;
-        const x = tower.x + Math.cos(a) * b.r - cx, y = tower.y - 150 + Math.sin(a) * b.r * 0.45 - cy;
+        const x = tower.x + Math.cos(a) * b.r - cx, y = tower.y - 140 + Math.sin(a) * b.r * 0.45 - cy;
         const flap = Math.sin(t * 0.016 + b.a * 3) > 0 ? 1 : -1;
         g.fillRect(x - 1, y, 3, 1); g.fillRect(x - 3, y - flap, 2, 1); g.fillRect(x + 2, y - flap, 2, 1);
       }
     }
 
-    /* Light. */
+    /* Light. Golden haze on the personal side, fading to clean daylight on paper. */
+    const mid = this.cam.y + vh / 2;
+    const pro = smoothstep(-220, 220, this.cam.x + vw / 2 - seamAt(this.plan, mid));
     g.globalCompositeOperation = "soft-light";
-    g.globalAlpha = 0.85;
+    g.globalAlpha = 0.85 * (1 - pro * 0.92);
     g.drawImage(this.grade, 0, 0);
-    g.globalAlpha = 1;
+    g.globalAlpha = 1 - pro * 0.7;
     g.globalCompositeOperation = "multiply";
     for (const c of this.clouds) {
       const x = c.x - cx, y = c.y - cy;
@@ -407,21 +445,23 @@ export class Engine {
       g.drawImage(L.hot ? this.hot : this.warm, x - r, y - r, r * 2, r * 2);
     }
     g.globalAlpha = 1;
-    if (!this.calm) {
+    if (!this.calm && pro < 0.98) {
       g.globalCompositeOperation = "screen";
-      g.globalAlpha = 0.55 + Math.sin(t * 0.0004) * 0.2;
+      g.globalAlpha = (0.55 + Math.sin(t * 0.0004) * 0.2) * (1 - pro);
       g.drawImage(this.rays, -100 - ((cx * 0.12) % 100), 0);
       g.globalAlpha = 1;
       g.globalCompositeOperation = "lighter";
       for (const m of this.motes) {
         const x = (m.x * vw + t * 0.006 * m.s + Math.sin(t * 0.0006 + m.p) * 16 - cx * 0.5) % vw;
         const y = (m.y * vh - t * 0.004 * m.s + Math.cos(t * 0.0008 + m.p) * 12 - cy * 0.5) % vh;
-        g.fillStyle = `rgba(255,214,140,${0.25 + 0.3 * Math.sin(t * 0.002 + m.p) ** 2})`;
+        g.fillStyle = `rgba(255,214,140,${(0.25 + 0.3 * Math.sin(t * 0.002 + m.p) ** 2) * (1 - pro)})`;
         g.fillRect(x < 0 ? x + vw : x, y < 0 ? y + vh : y, 1, 1);
       }
     }
     g.globalCompositeOperation = "source-over";
+    g.globalAlpha = 1 - pro * 0.55;
     g.drawImage(this.vignette, 0, 0);
+    g.globalAlpha = 1;
   }
 
   private drawPlayer(cx: number, cy: number) {
@@ -445,6 +485,11 @@ export class Engine {
     if (this.mode !== "title") this.frameSubs.forEach((fn) => fn(this));
     this.raf = requestAnimationFrame(this.loop);
   };
+}
+
+function smoothstep(a: number, b: number, v: number) {
+  const t = clamp((v - a) / (b - a), 0, 1);
+  return t * t * (3 - 2 * t);
 }
 
 function isTyping(e: KeyboardEvent) {

@@ -2,7 +2,11 @@
    this site or a full https:// address. */
 export const redirects: { from: string; to: string }[] = [
   { from: "/home", to: "/" },
-  { from: "/about-me", to: "/about" },
-  { from: "/resume", to: "/contact" },
-  { from: "/cv", to: "/contact" },
+  { from: "/about", to: "/letter" },
+  { from: "/contact", to: "/letter" },
+  { from: "/career", to: "/career-1" },
+  { from: "/projects", to: "/project-1" },
+  { from: "/skills", to: "/skills-1" },
+  { from: "/games", to: "/games-1" },
+  { from: "/fun", to: "/fun-1" },
 ];

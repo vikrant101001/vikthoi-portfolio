@@ -9,11 +9,15 @@ export function InteractPrompt() {
   const place = near ? placeById(near) : undefined;
   if (!place) return null;
   const { landmark, section } = place;
-  const verb = landmark.secret ? "Touch" : landmark.sprite === "brazier" ? "Rest at" : "Enter";
+  const verb = landmark.secret ? "Touch"
+    : section.type === "letter" ? "Read"
+    : section.type === "career" && section.stop.upcoming ? "Look at"
+    : section.type === "fun" ? "Visit"
+    : "Enter";
   return (
     <button className={styles.prompt} onClick={() => navigate(`/${section.slug}`)}>
       <kbd>E</kbd>
-      <span>{verb} {section.title}</span>
+      <span>{verb} {section.type === "letter" ? "the letter" : section.title}</span>
     </button>
   );
 }

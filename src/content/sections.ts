@@ -1,111 +1,92 @@
-/* One entry per place in the world. Keys match landmark ids in
-   src/world/plan.ts. All text is placeholder. */
-import type { Section } from "./types";
+/* Every place in the world, keyed by landmark id (see src/world/plan.ts).
+   The letter and the secret are written here; every stop on the five roads
+   is generated from its own content file (career, projects, skills, games,
+   fun). Text marked "placeholder" is waiting for your real details. */
+import { career } from "./career";
+import { projects } from "./projects";
+import { skillAreas } from "./skills";
+import { games } from "./games";
+import { funStuff } from "./fun";
+import { roads } from "./roads";
+import type { RoadKey, Section } from "./types";
 
-export const sections = {
-  hearth: {
-    type: "intro",
-    slug: "welcome",
-    label: "Welcome",
-    title: "The Hearth",
-    kicker: "Welcome, traveller",
-    lead: "One or two sentences on who you are and what you make. This is the first thing a visitor reads.",
+const fixed = {
+  letter: {
+    type: "letter",
+    side: "personal",
+    slug: "letter",
+    label: "The letter",
+    title: "The starting letter",
+    kicker: "Read me first",
+    lead: "Left on the lectern for whoever wanders in.",
+    greeting: "Dear traveller,",
     body: [
-      "A short paragraph on what you are looking for right now, and the kind of work you want to do next.",
-      "Every building in the vale holds a chapter of the story. Walk to one, or open the map and travel there directly.",
+      "You've found your way to my little corner of the map. I'm Vikrant, and this world is my portfolio: the work I've done, the things I've built, and the things I make just because they're fun, laid out as places you can walk to.",
+      "The land is split down the middle. To your right, the map is still being drawn in ink. That's my professional life: one road walks through my career stop by stop, and two more lead to my projects and my skills.",
+      "To your left, the land is warm and a little wild. That's my personal life: one road to Vikskull Games, and another to everything else I do for the joy of it.",
+      "Every road starts at a signboard on the edge of this square. Walk with WASD or the arrow keys, or tap where you want to go. Press E at a door to step inside, and press M whenever you want the map. Short on time? The map will take you anywhere instantly.",
+      "One more thing: somewhere out west there's a place I haven't put on any signboard. See if you can find it.",
     ],
-  },
-  keep: {
-    type: "character",
-    slug: "about",
-    label: "About",
-    title: "The Keep",
-    kicker: "About",
-    lead: "Your story in a few lines: where you started, what pulled you in, and what you care about.",
-    stats: [
-      { label: "Class", value: "Your role" },
-      { label: "Homeland", value: "Your city" },
-      { label: "Years of service", value: "0" },
-      { label: "Languages", value: "Your languages" },
-    ],
-    body: ["A longer paragraph about you. Write it the way you would introduce yourself to someone you respect."],
-  },
-  forge: {
-    type: "skills",
-    slug: "skills",
-    label: "Skills",
-    title: "The Forge",
-    kicker: "Skills",
-    lead: "The tools you have hammered into shape.",
-    groups: [
-      { name: "Primary arms", items: [{ name: "Skill one", level: 90 }, { name: "Skill two", level: 80 }, { name: "Skill three", level: 70 }] },
-      { name: "Secondary arms", items: [{ name: "Skill four", level: 65 }, { name: "Skill five", level: 55 }, { name: "Skill six", level: 45 }] },
-    ],
-  },
-  guild: {
-    type: "projects",
-    slug: "projects",
-    label: "Projects",
-    title: "The Guild Hall",
-    kicker: "Projects",
-    lead: "Contracts taken and completed. Each notice on the board is one project.",
-  },
-  archive: {
-    type: "timeline",
-    slug: "experience",
-    label: "Experience",
-    title: "The Archive",
-    kicker: "Experience",
-    lead: "The chronicle so far, written down by the scribes.",
-    items: [
-      { when: "20XX to now", name: "Role at Company", text: "What you owned and what you shipped." },
-      { when: "20XX to 20XX", name: "Role at Company", text: "What you owned and what you shipped." },
-      { when: "20XX to 20XX", name: "Degree or first role", text: "Where it began." },
-    ],
-  },
-  tavern: {
-    type: "tales",
-    slug: "beyond-work",
-    label: "Beyond work",
-    title: "The Gilded Tankard",
-    kicker: "Beyond work",
-    lead: "What you do when the day's work is done.",
-    items: [
-      { name: "A hobby", text: "A line or two about it." },
-      { name: "A favourite book or game", text: "A line or two about it." },
-      { name: "Something people say about you", text: "A short quote from a colleague." },
-    ],
-  },
-  raven: {
-    type: "contact",
-    slug: "contact",
-    label: "Contact",
-    title: "The Rookery",
-    kicker: "Contact",
-    lead: "Send a raven. It arrives faster than you might think.",
+    signoff: "Safe travels,",
+    signature: "Vikrant",
     links: [
       { label: "Email", value: "you@example.com", href: "mailto:you@example.com" },
-      { label: "GitHub", value: "github.com/you", href: "#" },
+      { label: "GitHub", value: "github.com/vikrant101001", href: "https://github.com/vikrant101001" },
       { label: "LinkedIn", value: "linkedin.com/in/you", href: "#" },
-      { label: "Résumé", value: "Download the scroll", href: "#" },
+      { label: "Résumé", value: "Download (PDF)", href: "#" },
     ],
   },
+
   stones: {
     type: "intro",
+    side: "personal",
     slug: "old-stones",
     label: "A secret",
     title: "The Old Stones",
-    kicker: "A secret place",
-    lead: "You found the place most travellers walk past.",
+    kicker: "You found it",
+    lead: "Most travellers walk right past this place.",
     body: ["Reserved for an easter egg. A hidden project, a joke, or a note to whoever looked this closely."],
   },
 } satisfies Record<string, Section>;
 
-export type SectionId = keyof typeof sections;
+/** Builds the sections for one road from its list of content entries. */
+function road<T>(key: RoadKey, items: T[], make: (item: T, i: number) => Omit<Section, "slug" | "side" | "road" | "index" | "total">) {
+  const info = roads[key];
+  return info.ids.map((id, i) => [id, { ...make(items[i], i), slug: id, side: info.side, road: key, index: i, total: items.length } as Section] as const);
+}
+
+const generated: Record<string, Section> = Object.fromEntries([
+  ...road("career", career, (stop, i) => ({
+    type: "career", stop, label: `Stop ${i + 1}`,
+    title: stop.upcoming ? "Coming soon" : stop.company, kicker: stop.period, lead: stop.role,
+  })),
+  ...road("projects", projects, (project, i) => ({
+    type: "project", project, label: `Project ${i + 1}`,
+    title: project.name, kicker: project.year ? `${project.rarity} · ${project.year}` : project.rarity, lead: project.summary,
+  })),
+  ...road("skills", skillAreas, (area, i) => ({
+    type: "skills", area, label: `Area ${i + 1}`,
+    title: area.name, kicker: "Skills", lead: area.blurb,
+  })),
+  ...road("games", games, (game, i) => ({
+    type: "game", game, label: game.studio ? "The studio" : `Game ${i}`,
+    title: game.name, kicker: game.status, lead: game.tagline,
+  })),
+  ...road("fun", funStuff, (item, i) => ({
+    type: "fun", item, label: `Stop ${i + 1}`,
+    title: item.name, kicker: "Fun stuff", lead: item.tagline,
+  })),
+] as (readonly [string, Section])[]);
+
+/** All places. The fixed ones are typed by name, so a typo like sections.leter is an error. */
+export const sections = { ...fixed, ...generated } as typeof fixed & Record<string, Section | undefined>;
 
 export const sectionById = (id: string): Section | undefined => (sections as Record<string, Section>)[id];
 
-export const sectionBySlug = (slug: string): { id: SectionId; section: Section } | undefined => {
-  for (const [id, section] of Object.entries(sections) as [SectionId, Section][]) if (section.slug === slug) return { id, section };
+export const sectionBySlug = (slug: string): { id: string; section: Section } | undefined => {
+  for (const [id, section] of Object.entries(sections as Record<string, Section>)) if (section.slug === slug) return { id, section };
   return undefined;
 };
+
+/** Landmark ids of the career stops, in order. */
+export const careerIds = roads.career.ids;

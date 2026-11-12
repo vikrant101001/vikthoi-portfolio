@@ -19,6 +19,8 @@ export function TitleScreen({ skip }: { skip: boolean }) {
 
   if (gone) return null;
   const begin = () => useGame.setState({ started: true });
+  /* The journey starts by reading the letter on the lectern. */
+  const start = () => { begin(); navigate("/letter"); };
 
   return (
     <section className={`${styles.title} ${started ? styles.leaving : ""}`}>
@@ -30,7 +32,7 @@ export function TitleScreen({ skip }: { skip: boolean }) {
         <p className={styles.tagline}>{profile.tagline}</p>
         {ready ? (
           <div className={styles.actions}>
-            <button className="btn btn-primary" onClick={begin} autoFocus>Begin the journey</button>
+            <button className="btn btn-primary" onClick={start} autoFocus>Begin the journey</button>
             <button className="btn" onClick={() => { begin(); navigate("/map"); }}>Skip to the map</button>
           </div>
         ) : (

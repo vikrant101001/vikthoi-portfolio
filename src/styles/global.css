@@ -12,6 +12,7 @@ kbd {
   font-family: var(--display); font-size: 12px; font-weight: 700; color: var(--gold-bright);
   padding: 2px 7px; border: 1px solid var(--gold-dim); border-radius: 3px; background: rgba(20, 12, 5, 0.75);
 }
+:root[data-side="pro"] kbd { font-family: var(--sans); color: var(--pro-ink); background: #fff; border-color: var(--pro-line); box-shadow: 0 1px 0 var(--pro-line); }
 
 /* Parchment sheet with a leather and gold frame. */
 .parchment {

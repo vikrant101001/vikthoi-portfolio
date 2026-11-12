@@ -1,6 +1,7 @@
 .prompt {
   position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); display: flex; gap: 11px; align-items: center;
-  padding: 10px 22px; font-family: var(--display); font-size: 17px; color: #ffe9b8; white-space: nowrap;
-  background: linear-gradient(90deg, transparent, rgba(20, 12, 5, 0.92) 15%, rgba(20, 12, 5, 0.92) 85%, transparent);
+  padding: 10px 22px; font-family: var(--hud-font); font-size: 17px; color: var(--hud-title); white-space: nowrap;
+  background: linear-gradient(90deg, transparent, var(--hud-bg) 15%, var(--hud-bg) 85%, transparent);
   animation: fade-in 0.2s ease;
 }
+:root[data-side="pro"] .prompt { font-weight: 600; font-size: 15px; }

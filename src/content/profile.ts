@@ -1,9 +1,9 @@
 import type { Profile } from "./types";
 
-/* Placeholder. Replace with your details. */
 export const profile: Profile = {
-  name: "Your Name",
+  name: "Vikrant Thoidingjam",
+  /* Placeholder: your role, e.g. "Software Engineer". */
   title: "Your Role",
-  tagline: "A portfolio you can walk through.",
-  realm: "The Amber Vale",
+  tagline: "Work to the right, life to the left. Walk wherever you like.",
+  realm: "The Two Halves",
 };

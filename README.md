@@ -1,6 +1,6 @@
 # vikthoi-portfolio
 
-The Amber Vale: a portfolio you can walk through. A top-down, golden-hour world where each building is a section.
+A portfolio you can walk through. The world is split down the middle: professional life on the right, drawn in ink on paper, and personal life on the left, painted warm and a little wild. A letter at the start explains the way.
 
 ```
 npm install
@@ -13,9 +13,9 @@ npm run typecheck
 
 | Folder | What it holds | React? |
 | --- | --- | --- |
-| `src/content/` | Everything visitors read: profile, sections, projects. Start here. | No |
-| `src/world/plan.ts` | Where buildings, roads, the river and props sit. | No |
-| `src/engine/` | The game: terrain, sprites, collision, camera, light. | No |
+| `src/content/` | Everything visitors read. One file per road (`career`, `projects`, `skills`, `games`, `fun`); each entry becomes a building. The letter is in `sections.ts`. Start here. | No |
+| `src/world/plan.ts` | The square, the five roads and their signboards. Stops are laid out from the content files. Only roads and the square are walkable. | No |
+| `src/engine/` | The game: terrain, collision, camera, light. Sprites are in `engine/sprites/`, one file per half. | No |
 | `src/game/` | The bridge: the single engine instance and the store React reads. | Thin |
 | `src/ui/` | HUD, title screen, section panels, world map. | Yes |
 | `src/pages/` | Normal scrolling pages: project write-ups, games, 404. | Yes |
@@ -34,15 +34,18 @@ re-render 60 times a second.
 | --- | --- |
 | `/` | The world |
 | `/map` | World map over the world |
-| `/<section slug>` | A section over the world, e.g. `/about`, `/projects`. Shareable, and lands the traveller at that building. |
+| `/<place>` | A place over the world: `/letter`, `/career-3`, `/project-2`, `/skills-1`, `/games-4`, `/fun-2`. Shareable, and lands the traveller at that building. |
 | `/projects/<slug>` | A project's own page |
 | `/play/<game id>` | A mini-game |
 | anything in `src/app/redirects.ts` | Redirects elsewhere, inside or outside the site |
 
 ## Common changes
 
-- **Add a project:** add an entry to `src/content/projects.ts`. It appears on the Guild Hall board and gets a page.
-- **Add a section and building:** add the section to `src/content/sections.ts` and a landmark with the same id to `src/world/plan.ts`.
+- **Edit the starting letter:** the `letter` entry in `src/content/sections.ts`.
+- **Add a stop to a road:** add an entry to that road's content file (`career.ts`, `projects.ts`, `skills.ts`, `games.ts`, `fun.ts`). The building, its signposted place on the road, its panel, its link (e.g. `/project-3`) and its row on the map all appear automatically. On the career road keep the last `upcoming: true` entry as the construction site; in `fun.ts`, `look` picks tent, stall, gazebo or campfire.
+- **Full project write-ups** live at `/projects/<slug>`, linked from each project's stop.
+- **Add a whole new road:** add it to `src/content/roads.ts`, generate its sections in `sections.ts`, lay it out with `layRoad` and give it a `board` in `src/world/plan.ts`, and add it to `journey` in `src/game/places.ts`.
+- **Change how either half looks:** colours in `src/engine/palette.ts` (world) and `src/styles/tokens.css` (interface; the `--hud-*` tokens switch when you cross the seam).
 - **Add a new kind of section layout:** add a member to `Section` in `src/content/types.ts`, a component in `src/ui/panel/sections/`, and a case in `SectionBody.tsx`. TypeScript flags anything missed.
 - **Add a page:** create it in `src/pages/` using `PageShell`, then add a route in `src/app/router.tsx`.
 - **Add a mini-game:** see the comment at the top of `src/games/registry.ts`.

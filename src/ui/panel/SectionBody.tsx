@@ -3,22 +3,22 @@
    reports an error until every type is handled. */
 import type { Section } from "@/content/types";
 import { Paragraphs } from "./sections/Paragraphs";
-import { CharacterSheet } from "./sections/CharacterSheet";
-import { SkillBars } from "./sections/SkillBars";
-import { QuestBoard } from "./sections/QuestBoard";
-import { Chronicle } from "./sections/Chronicle";
-import { Tales } from "./sections/Tales";
-import { Ravens } from "./sections/Ravens";
+import { Letter } from "./sections/Letter";
+import { CareerStop } from "./sections/CareerStop";
+import { ProjectStop } from "./sections/ProjectStop";
+import { SkillStop } from "./sections/SkillStop";
+import { GameStop } from "./sections/GameStop";
+import { FunStop } from "./sections/FunStop";
 
 export function SectionBody({ section }: { section: Section }) {
   switch (section.type) {
     case "intro": return <Paragraphs body={section.body} />;
-    case "character": return <CharacterSheet section={section} />;
-    case "skills": return <SkillBars section={section} />;
-    case "projects": return <QuestBoard />;
-    case "timeline": return <Chronicle section={section} />;
-    case "tales": return <Tales section={section} />;
-    case "contact": return <Ravens section={section} />;
+    case "letter": return <Letter section={section} />;
+    case "career": return <CareerStop section={section} />;
+    case "project": return <ProjectStop section={section} />;
+    case "skills": return <SkillStop section={section} />;
+    case "game": return <GameStop section={section} />;
+    case "fun": return <FunStop section={section} />;
     default: return assertNever(section);
   }
 }

@@ -12,7 +12,7 @@ export function Badge() {
       <div className={styles.text}>
         <strong>{profile.name}</strong>
         <span>{profile.title}</span>
-        <div className={styles.renown} aria-hidden="true">
+        <div className={styles.progress} title={`${found} of ${mainPlaces.length} places visited`}>
           <i style={{ width: `${(found / mainPlaces.length) * 100}%` }} />
         </div>
       </div>
