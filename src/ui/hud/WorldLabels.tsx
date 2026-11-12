@@ -24,7 +24,11 @@ export function WorldLabels() {
         const el = layer.current, w = e.world;
         if (!el || !w) return;
         const s = String(e.pixelScale);
-        if (el.style.getPropertyValue("--s") !== s) el.style.setProperty("--s", s);
+        if (el.style.getPropertyValue("--s") !== s) {
+          el.style.setProperty("--s", s);
+          /* At 1:1 (phones) the world's text would be tiny, so labels switch to a compact look. */
+          el.classList.toggle(styles.compact, e.pixelScale < 2);
+        }
         const vw = innerWidth, vh = innerHeight;
         for (const label of el.children as HTMLCollectionOf<HTMLElement>) {
           const id = label.dataset.place;

@@ -198,7 +198,10 @@ export class Engine {
     const cv = this.cv, g = this.g;
     if (!cv || !g) return;
     const w = innerWidth, h = innerHeight;
-    this.scale = Math.max(2, Math.round(Math.min(w / 640, h / 360)));
+    /* How many screen pixels each art pixel takes. Big screens aim to show
+       about 640×360 of the world; phones and narrow windows drop to 1, so a
+       portrait phone still sees the whole centre stage and its signboards. */
+    this.scale = Math.max(1, Math.round(Math.min(w / 640, h / 360)));
     this.vw = Math.ceil(w / this.scale);
     this.vh = Math.ceil(h / this.scale);
     cv.width = this.vw;

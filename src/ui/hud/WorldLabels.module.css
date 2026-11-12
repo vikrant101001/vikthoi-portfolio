@@ -38,3 +38,12 @@
 }
 
 .arrow { display: inline-block; width: 1em; height: 1em; flex: none; }
+
+/* Phones (1:1 scale): readable minimum sizes, and the signboard text gets its
+   own tag in the board's colours so it never spills off the little sign. */
+.compact .label { font-size: 11px; }
+.compact .label small { font-size: 9px; }
+.compact .engraved { font-size: 9px; letter-spacing: 0.18em; }
+.compact .board { font-size: 11px; padding: 3px 7px; border-radius: 2px; }
+.compact .board.personal { background: #a07a42; border: 1px solid #1c130b; color: #24130a; }
+.compact .board.pro { background: #fbf8f1; border: 1px solid var(--pro-ink); }
