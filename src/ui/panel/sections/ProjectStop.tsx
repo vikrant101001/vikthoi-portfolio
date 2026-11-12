@@ -12,7 +12,9 @@ export function ProjectStop({ section }: { section: SectionOf<"project"> }) {
       {project.body[0] && <p>{project.body[0]}</p>}
       {project.stack && <ul className={styles.chips} aria-label="Built with">{project.stack.map((s, i) => <li key={i}>{s}</li>)}</ul>}
       <div className={styles.actions}>
-        <Link className={styles.primary} to={`/projects/${project.slug}`}>Read the full story &rarr;</Link>
+        <Link className={styles.primary} to={`/projects/${project.slug}`}>
+          {project.embed ? "Try it live" : "Read the full story"} &rarr;
+        </Link>
         {project.links?.map((l) => <a key={l.label} href={l.href}>{l.label}</a>)}
       </div>
       <RoadNav road={section.road} index={section.index} />

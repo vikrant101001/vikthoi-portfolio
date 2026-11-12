@@ -40,6 +40,8 @@ export interface Project {
   /** Paragraphs for the project's own page. */
   body: string[];
   links?: { label: string; href: string }[];
+  /** Runs the live site inside a screen on the project's page. The site must allow being embedded. */
+  embed?: { url: string };
 }
 
 export interface SkillArea {

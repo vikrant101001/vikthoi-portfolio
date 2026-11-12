@@ -1,21 +1,19 @@
-/* Each project appears as a card in the Projects gallery and gets its own page at
-   /projects/<slug>. All text is placeholder. */
+/* Each project is a building on the projects road and gets its own page at
+   /projects/<slug>. Add `embed` to run the live site in a screen on that page.
+   Text marked "placeholder" is waiting for your real details. */
 import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
-    slug: "project-one",
-    name: "Project one",
+    slug: "rawbify",
+    name: "Rawbify",
     rarity: "Featured",
-    summary: "What it is, what you did, and what changed because of it.",
-    year: "20XX",
-    stack: ["Tool", "Tool", "Tool"],
+    summary: "Raw data in, BI-ready out. Rawbify turns messy business data into clean, analysis-ready datasets for Power BI and Tableau in minutes, not hours.",
     body: [
-      "The problem: who had it, and why it mattered.",
-      "What you built and the decisions that shaped it.",
-      "The result, with a number if you have one.",
+      "Placeholder: the problem Rawbify solves, who has it, and why it matters.",
+      "Placeholder: how you built it and the decisions that shaped it.",
     ],
-    links: [{ label: "Live", href: "#" }, { label: "Source", href: "#" }],
+    embed: { url: "https://rawbify.vercel.app/" },
   },
   {
     slug: "project-two",
